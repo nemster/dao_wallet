@@ -738,10 +738,14 @@ mod dao_wallet {
             let cosigner = Cosigner::new(badge_id);
 
             // Remove the cosigner from the list for the specified operation
-            self.operations
+            let was_present = self.operations
                 .get_mut(&operation)
                 .expect("Operation not found")
                 .swap_remove(&cosigner);
+            assert!(
+                was_present,
+                "Non existing signature"
+            );
         }
 
         /* A member can invoke this method to create/sign an operation to dismiss this component
